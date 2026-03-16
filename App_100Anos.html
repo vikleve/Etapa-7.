@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora 100 Anos</title>
+    <!-- Adicionando fontes modernas (Google Fonts) e ícones (FontAwesome) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Paleta de cores moderna */
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #dfe6e9;
+            --bg-gradient-1: #090909;
+            --bg-gradient-2: #1f1f2e;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            /* Fundo com gradiente animado moderno e escuro */
+            background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), #2a113a, #112d4e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animações Flutuantes no fundo (Opcional, dá um charme) */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(108, 92, 231, 0.4) 0%, rgba(108, 92, 231, 0) 70%);
+            z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+        .circle-1 { top: -10%; left: -10%; width: 400px; height: 400px; }
+        .circle-2 { bottom: -10%; right: -5%; width: 300px; height: 300px; animation-delay: -3s; background: radial-gradient(circle, rgba(253, 121, 168, 0.3) 0%, rgba(253, 121, 168, 0) 70%);}
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0px) rotate(360deg); }
+        }
+
+        /* O "Aplicativo" principal - Glassmorphism */
+        .app-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            z-index: 10;
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Cabeçalho do App */
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            /* Texto com gradiente */
+            background: linear-gradient(90deg, #a29bfe, #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            user-select: none;
+        }
+
+        .header p {
+            color: #b2bec3;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        /* Campos de Entrada (Inputs) */
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b2bec3;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 16px 16px 50px;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid transparent;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input::placeholder {
+            color: #636e72;
+        }
+
+        /* Efeito ao focar no campo */
+        .input-group input:focus {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .input-group input:focus + i, 
+        .input-group input:focus ~ i {
+            color: var(--primary);
+        }
+
+        /* Label animada (opcional, flutuante por cima do input) */
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #dfe6e9;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Botão Principal */
+        .btn-calcular {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), #4834d4);
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-calcular:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(108, 92, 231, 0.5);
+            background: linear-gradient(135deg, #7b6eea, #5b46ed);
+        }
+
+        .btn-calcular:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 10px rgba(108, 92, 231, 0.4);
+        }
+
+        /* Área de Resultados */
+        .result-area {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: none; /* Escondido inicial */
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .result-area.active {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+            animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .greeting {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffeaa7;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .main-calculation {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #81ecec;
+            margin-bottom: 20px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #00cec9;
+        }
+
+        /* Efeito de destaque para os números */
+        .highlight-number {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fdcb6e;
+            text-shadow: 0 0 10px rgba(253, 203, 110, 0.5);
+        }
+
+        .explanation {
+            font-size: 13px;
+            color: #b2bec3;
+            text-align: center;
+            line-height: 1.5;
+            font-style: italic;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+
+        /* Alerta de erro nativo moderno */
+        .error-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #d63031;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(214, 48, 49, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .error-toast.show {
+            transform: translateX(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Formas de fundo para dar vida -->
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+
+    <!-- Container Principal do App -->
+    <div class="app-container">
+        
+        <!-- Cabeçalho -->
+        <div class="header">
+            <h1><i class="fa-solid fa-hourglass-half"></i> App 100 Anos</h1>
+            <p>Descubra quando você atingirá um século de vida</p>
+        </div>
+
+        <!-- Formulário de Entrada -->
+        <div class="form-container">
+            
+            <label class="input-label" for="nome">Nome de Usuário</label>
+            <div class="input-group">
+                <i class="fa-regular fa-user"></i>
+                <input type="text" id="nome" placeholder="Digite seu nome (Ex: João)" autocomplete="off">
+            </div>
+
+            <label class="input-label" for="idade">Idade Atual</label>
+            <div class="input-group">
+                <i class="fa-regular fa-calendar"></i>
+                <input type="number" id="idade" placeholder="Digite sua idade (Ex: 25)" min="0" max="150" autocomplete="off">
+            </div>
+
+            <button class="btn-calcular" onclick="executarCalculo()" id="btn-calc">
+                <i class="fa-solid fa-calculator"></i> Calcular Destino
+            </button>
+        </div>
+
+        <!-- Área onde o resultado aparece -->
+        <div class="result-area" id="result-box">
+            <div class="greeting" id="res-greeting">Olá, Usuário! 👋</div>
+            
+            <div class="main-calculation">
+                Uma rápida demonstração do que foi aprendido é:<br>
+                Em cerca de <span class="highlight-number" id="res-years">0</span> anos, você completará 100 anos de idade.
+            </div>
+
+            <div class="explanation" id="res-explanation">
+                Esse cálculo é feito subtraindo a sua idade atual de 100...
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Error Toast (Notificação visual de erro) -->
+    <div class="error-toast" id="error-toast">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="error-msg">Preencha tudo corretamente!</span>
+    </div>
+
+    <!-- Lógica JavaScript Principal -->
+    <script>
+        // Função para mostrar notificação de erro requintada
+        function showError(mensagem) {
+            const toast = document.getElementById('error-toast');
+            document.getElementById('error-msg').innerText = mensagem;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500); // Some após 3.5 segundos
+        }
+
+        // Função responsável pela interação e cálculo (Etapa 7 logic)
+        function executarCalculo() {
+            // Pegando os valores digitados pelo usuário
+            const nomeStr = document.getElementById('nome').value.trim();
+            const idadeStr = document.getElementById('idade').value;
+            
+            // Área de Resultados e elementos
+            const resultBox = document.getElementById('result-box');
+            const resGreeting = document.getElementById('res-greeting');
+            const resYears = document.getElementById('res-years');
+            const resExplanation = document.getElementById('res-explanation');
+            const btnCalc = document.getElementById('btn-calc'); // Para efeitozinho no botão
+
+            // Validações Essenciais
+            if (!nomeStr) {
+                showError("Por favor, precisamos do seu nome!");
+                document.getElementById('nome').focus();
+                return;
+            }
+
+            if (!idadeStr || isNaN(idadeStr)) {
+                showError("Por favor, digite uma idade válida!");
+                document.getElementById('idade').focus();
+                return;
+            }
+
+            const idade = parseInt(idadeStr);
+
+            if (idade < 0 || idade > 150) {
+                showError("Opa! Digite uma idade realista entre 0 e 150.");
+                return;
+            }
+
+            /* --- O CÁLCULO PRINCIPAL DA ETAPA 7 --- */
+            const idade_100 = 100 - idade;
+
+            // Efeito visual no botão (feedback de clique)
+            btnCalc.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Calculando...';
+            btnCalc.style.opacity = '0.8';
+
+            // Simula um delay pequeníssimo para "Processamento" (Dá sensação de sistema real)
+            setTimeout(() => {
+                // Voltar botão ao normal
+                btnCalc.innerHTML = '<i class="fa-solid fa-calculator"></i> Calcular Destino';
+                btnCalc.style.opacity = '1';
+
+                // Inserir os textos convertidos do Python para a Interface
+                resGreeting.innerHTML = `Olá, <strong>${nomeStr}</strong>! 🎉<br><span style="font-size: 14px; font-weight: normal; color: #dfe6e9;">Seja bem-vindo à etapa 7 do nosso curso.</span>`;
+
+                if (idade_100 > 0) {
+                    resYears.innerHTML = idade_100;
+                    resExplanation.innerHTML = `Esse cálculo é feito subtraindo a sua idade atual de 100 (100 - ${idade} = <strong>${idade_100}</strong>), para descobrir quantos anos faltam para você chegar a essa marca.`;
+                } else if (idade_100 === 0) {
+                    document.querySelector('.main-calculation').innerHTML = `Uma rápida demonstração do que foi aprendido é:<br>Você já tem exatamente <span class="highlight-number">100 anos</span> de idade! Parabéns!`;
+                    resExplanation.innerHTML = `Esse cálculo é feito subtraindo a sua idade atual de 100 (100 - ${idade} = <strong>0</strong>).`;
+                } else {
+                    document.querySelector('.main-calculation').innerHTML = `Uma rápida demonstração do que foi aprendido é:<br>Você já passou dos 100 anos há <span class="highlight-number">${Math.abs(idade_100)}</span> anos! Impressionante!`;
+                    resExplanation.innerHTML = `Esse cálculo é feito subtraindo a sua idade atual de 100 (100 - ${idade} = <strong>${idade_100}</strong>).`;
+                }
+
+                // Mostrar o Box de forma animada (remover classe e adicionar novamente para "piscar" a animação se já estiver aberto)
+                resultBox.classList.remove('active');
+                void resultBox.offsetWidth; // Trigger reflow, reinicia animação
+                resultBox.classList.add('active');
+                
+            }, 600); // 0.6 segundos de delay
+
+        }
+
+        // Permitir que o botão "Enter" do teclado execute o cálculo quando estiver no campo idade
+        document.getElementById('idade').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Evita recarregar se estivesse dentro de um <form> real
+                executarCalculo();
+            }
+        });
+        
+        // Focar no nome ao abrir o site
+        window.onload = function() {
+            document.getElementById('nome').focus();
+        };
+
+    </script>
+</body>
+</html>
